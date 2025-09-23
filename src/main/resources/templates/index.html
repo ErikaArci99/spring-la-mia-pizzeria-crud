@@ -9,10 +9,24 @@
     <div class="container mt-4">
         <h1 class="mb-4 text-center">Le nostre pizze</h1>
 
+        <!-- Form di ricerca -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-12 col-md-6 col-lg-4">
+                <form th:action="@{/search}" method="get" class="d-flex">
+                    <input type="text" name="keyword" class="form-control me-2" placeholder="Cerca pizza...">
+                    <button type="submit" class="btn btn-secondary">Cerca</button>
+                </form>
+            </div>
+        </div>
+
+
+        <!-- se non ci sono pizze, mostra questo messaggio -->
         <div th:if="${pizze.isEmpty()}">
             <p class="text-danger text-center">Nessuna pizza disponibile.</p>
         </div>
 
+
+        <!-- card pizze -->
         <div th:if="${!pizze.isEmpty()}" class="row g-4">
             <div class="col-12 col-sm-6 col-md-4" th:each="pizza : ${pizze}">
                 <div class="card h-100 pizza-card">

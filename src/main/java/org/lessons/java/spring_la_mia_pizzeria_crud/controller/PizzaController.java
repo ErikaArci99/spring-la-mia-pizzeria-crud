@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -19,11 +20,6 @@ public class PizzaController {
     @GetMapping("/")
     public String index(Model model) {
         List<Pizza> pizze = pizzaRepository.findAll();
-
-        // LOG DI VERIFICA
-        System.out.println("Pizze trovate: " + pizze.size());
-        pizze.forEach(System.out::println);
-
         model.addAttribute("pizze", pizze);
         return "index";
     }
@@ -31,9 +27,16 @@ public class PizzaController {
     @GetMapping("/pizza/{id}")
     public String showPizza(@PathVariable("id") Integer id, Model model) {
         Pizza pizza = pizzaRepository.findById(id.longValue()).orElse(null);
-
         model.addAttribute("pizza", pizza);
         return "show";
     }
 
+    // Ricerca per nome o descrizione
+    @GetMapping("/search")
+    public String searchByNameOrDescrizione(@RequestParam("keyword") String keyword, Model model) {
+        List<Pizza> pizze = pizzaRepository.findByNomeContainingIgnoreCaseOrDescrizioneContainingIgnoreCase(keyword,
+                keyword);
+        model.addAttribute("pizze", pizze);
+        return "index";
+    }
 }
