@@ -9,23 +9,21 @@
     <div class="container mt-4">
         <h1 class="mb-4 text-center">Le nostre pizze</h1>
 
-        <!-- Messaggio se non ci sono pizze -->
         <div th:if="${pizze.isEmpty()}">
             <p class="text-danger text-center">Nessuna pizza disponibile.</p>
         </div>
 
-        <!-- Card pizze -->
-        <div th:if="${!pizze.isEmpty()}" class="row row-cols-1 row-cols-md-3 g-4">
-            <div class="col" th:each="pizza : ${pizze}">
-                <div class="card h-100">
-                    <img th:src="${pizza.foto}" class="card-img-top" alt="pizza"
-                        style="height:200px; object-fit:cover;">
+        <div th:if="${!pizze.isEmpty()}" class="row g-4">
+            <div class="col-12 col-sm-6 col-md-4" th:each="pizza : ${pizze}">
+                <div class="card h-100 pizza-card">
+                    <img th:src="${pizza.foto}" class="card-img-top pizza-img" alt="pizza">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${pizza.nome}"></h5>
                         <p class="card-text" th:text="${pizza.descrizione}"></p>
                     </div>
-                    <div class="card-footer">
+                    <div class="card-footer d-flex justify-content-between align-items-center">
                         <small class="text-muted" th:text="${pizza.prezzo} + ' €'"></small>
+                        <a th:href="@{/pizza/{id}(id=${pizza.id})}" class="btn btn-secondary btn-sm">Dettagli</a>
                     </div>
                 </div>
             </div>
