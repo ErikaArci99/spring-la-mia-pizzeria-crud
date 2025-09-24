@@ -6,7 +6,7 @@
 <body>
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-    <div class="container mt-4">
+    <div class="container mt-6">
         <div class="card mx-auto">
             <img th:src="${pizza.foto}" class="card-img-top" alt="pizza">
             <div class="card-body">
@@ -19,6 +19,7 @@
             </div>
         </div>
     </div>
+    <div th:replace="fragments/scripts :: scripts"></div>
 </body>
 
 </html>

@@ -12,16 +12,16 @@ public class Pizza {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "il campo nome non può essere vuoto")
     private String nome;
 
-    @NotBlank
+    @NotBlank(message = "aggiungere la descrizione della pizza")
     private String descrizione;
 
-    @NotBlank
+    @NotBlank(message = "inserisci url immagine")
     private String foto;
 
-    @Positive
+    @Positive(message = "il prezzo non può essere negativo")
     private Double prezzo;
 
     // getter e setter
