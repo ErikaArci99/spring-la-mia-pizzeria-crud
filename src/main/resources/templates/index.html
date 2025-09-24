@@ -43,8 +43,13 @@
                     </div>
                     <div class="card-footer d-flex justify-content-between align-items-center">
                         <small class="text-muted" th:text="${pizza.prezzo} + ' €'"></small>
-                        <a th:href="@{/pizza/{id}(id=${pizza.id})}" class="btn btn-secondary btn-sm">Dettagli</a>
+                        <div class="btn-group">
+                            <a th:href="@{/pizza/{id}(id=${pizza.id})}" class="btn btn-secondary btn-sm">Dettagli</a>
+                            <a th:href="@{/pizza/edit/{id}(id=${pizza.id})}"
+                                class="btn btn-warning btn-sm mx-2">Modifica</a>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
