@@ -87,4 +87,12 @@ public class PizzaController {
         pizzaRepository.save(formPizza);
         return "redirect:/pizza/" + id; // dopo update rimanda alla show
     }
+
+    // DELETE - eliminazione definitiva di una pizza
+    @PostMapping("/pizza/delete/{id}")
+    public String delete(@PathVariable Long id) {
+        pizzaRepository.deleteById(id);
+        return "redirect:/";
+    }
+
 }
