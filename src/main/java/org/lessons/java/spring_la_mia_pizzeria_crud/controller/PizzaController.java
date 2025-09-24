@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.validation.Valid;
-
 import java.util.List;
 
 @Controller
@@ -22,42 +21,46 @@ public class PizzaController {
     @Autowired
     private PizzaRepository pizzaRepository;
 
-    // mostra tutte le pizze
+    // Mostra tutte le pizze
     @GetMapping("/")
     public String index(Model model) {
         List<Pizza> pizze = pizzaRepository.findAll();
         model.addAttribute("pizze", pizze);
-        return "index";
+        return "pizze/index";
     }
 
-    // mosra la pzza con id:
+    // Mostra una pizza specifica
     @GetMapping("/pizza/{id}")
-    public String showPizza(@PathVariable("id") Integer id, Model model) {
-        Pizza pizza = pizzaRepository.findById(id.longValue()).orElse(null);
+    public String showPizza(@PathVariable("id") Long id, Model model) {
+        Pizza pizza = pizzaRepository.findById(id).orElse(null);
+        if (pizza == null) {
+            return "redirect:/"; // pizza non trovata
+        }
         model.addAttribute("pizza", pizza);
-        return "show";
+        return "pizze/show";
     }
 
-    // Ricerca per nome o descrizione
+    // Ricerca pizze per nome o descrizione
     @GetMapping("/search")
     public String searchByNameOrDescrizione(@RequestParam("keyword") String keyword, Model model) {
         List<Pizza> pizze = pizzaRepository.findByNomeContainingIgnoreCaseOrDescrizioneContainingIgnoreCase(keyword,
                 keyword);
         model.addAttribute("pizze", pizze);
-        return "index";
+        return "pizze/index";
     }
 
-    // Creazione nuova pizza
+    // Creazione nuova pizza - form
     @GetMapping("/pizza/create")
     public String createForm(Model model) {
         model.addAttribute("pizza", new Pizza());
-        return "create";
+        return "pizze/create";
     }
 
+    // Salvataggio nuova pizza
     @PostMapping("/pizza/create")
-    public String storePizza(@Valid Pizza pizza, BindingResult bindingResult, Model model) {
+    public String storePizza(@Valid @ModelAttribute("pizza") Pizza pizza, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            return "create"; // torna al form mostrando errori
+            return "pizze/create";
         }
         pizzaRepository.save(pizza);
         return "redirect:/";
@@ -68,31 +71,30 @@ public class PizzaController {
     public String edit(@PathVariable Long id, Model model) {
         Pizza pizza = pizzaRepository.findById(id).orElse(null);
         if (pizza == null) {
-            return "redirect:/"; // se non trova la pizza torna alla lista
+            return "redirect:/";
         }
         model.addAttribute("pizza", pizza);
-        return "edit";
+        return "pizze/edit";
     }
 
-    // UPDATE - salvataggio modifica pizza
+    // Salvataggio modifica pizza
     @PostMapping("/pizza/edit/{id}")
     public String update(@PathVariable Long id,
             @Valid @ModelAttribute("pizza") Pizza formPizza,
             BindingResult bindingResult,
             Model model) {
         if (bindingResult.hasErrors()) {
-            return "edit";
+            return "pizze/edit";
         }
-        formPizza.setId(id); // assicura che stiamo aggiornando e non creando
+        formPizza.setId(id);
         pizzaRepository.save(formPizza);
-        return "redirect:/pizza/" + id; // dopo update rimanda alla show
+        return "redirect:/pizza/" + id;
     }
 
-    // DELETE - eliminazione definitiva di una pizza
+    // Eliminazione pizza
     @PostMapping("/pizza/delete/{id}")
     public String delete(@PathVariable Long id) {
         pizzaRepository.deleteById(id);
         return "redirect:/";
     }
-
 }
